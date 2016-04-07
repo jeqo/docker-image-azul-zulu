@@ -1,0 +1,39 @@
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - vars/centos.yml
+  tasks:
+    - name: create container
+      docker:
+        name: tmp-zulu-centos
+        image: "{{ base_image }}"
+        command: sleep infinity
+        state: started
+
+    - add_host:
+        name: tmp-zulu-centos
+        groups: docker
+        ansible_connection: docker
+
+- hosts: tmp-zulu-centos
+  connection: docker
+  roles:
+    - role: jeqo.java
+      java_provider: azul
+      java_version: 8
+
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - vars/centos.yml
+  tasks:
+    - name: docker commit
+      command: "docker commit tmp-zulu-centos {{ organization }}/{{ image_name }}:{{ item }}"
+      with_items: "{{ tags }}"
+
+    - name: docker push
+      command: "docker push {{ organization }}/{{ image_name }}:{{ item }}"
+      with_items: "{{ tags }}"
+
+    - name: docker kill
+      command: "docker kill tmp-zulu-centos"

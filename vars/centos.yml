@@ -1,0 +1,6 @@
+base_image: jeqo/centos
+organization: jeqo
+image_name: azul-zulu
+tags:
+  - latest
+  - centos-0.0.1
