@@ -1,21 +1,21 @@
 - hosts: 127.0.0.1
   connection: local
   vars_files:
-    - vars/centos.yml
+    - vars/ubuntu.yml
   tasks:
     - name: create container
       docker:
-        name: tmp-zulu-centos
+        name: tmp-zulu-ubuntu
         image: "{{ base_image }}"
         command: sleep infinity
         state: started
 
     - add_host:
-        name: tmp-zulu-centos
+        name: tmp-zulu-ubuntu
         groups: docker
         ansible_connection: docker
 
-- hosts: tmp-zulu-centos
+- hosts: tmp-zulu-ubuntu
   connection: docker
   roles:
     - role: jeqo.java
@@ -25,10 +25,10 @@
 - hosts: 127.0.0.1
   connection: local
   vars_files:
-    - vars/centos.yml
+    - vars/ubuntu.yml
   tasks:
     - name: docker commit
-      command: "docker commit tmp-zulu-centos {{ organization }}/{{ image_name }}:{{ item }}"
+      command: "docker commit tmp-zulu-ubuntu {{ organization }}/{{ image_name }}:{{ item }}"
       with_items: "{{ tags }}"
 
     - name: docker push
@@ -36,4 +36,4 @@
       with_items: "{{ tags }}"
 
     - name: docker kill
-      command: "docker kill tmp-zulu-centos"
+      command: "docker kill tmp-zulu-ubuntu"

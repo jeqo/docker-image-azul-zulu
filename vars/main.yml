@@ -1,6 +1,6 @@
-base_image: jeqo/centos
+base_image: jeqo/ubuntu:14.04
 organization: jeqo
 image_name: azul-zulu
 tags:
   - latest
-  - centos-0.0.1
+  - ubuntu-8.72
