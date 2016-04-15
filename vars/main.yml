@@ -3,4 +3,5 @@ organization: jeqo
 image_name: azul-zulu
 tags:
   - latest
-  - ubuntu-8.72
+  - ubuntu
+  - ubuntu-8
